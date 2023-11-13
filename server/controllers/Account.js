@@ -3,6 +3,7 @@ const models = require('../models');
 const { Account } = models;
 
 const loginPage = (req, res) => res.render('login');
+const changePasswordPage = (req, res) => res.render('changePassword');
 
 const logout = (req, res) => {
   req.session.destroy();
@@ -56,9 +57,38 @@ const signup = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  const newPass = `${req.body.newPass}`;
+  const newPass2 = `${req.body.newPass2}`;
+
+  if (!newPass || !newPass2) {
+    return res.status(400).json({ error: 'All fields are required!' });
+  }
+
+  if (newPass !== newPass2) {
+    return res.status(400).json({ error: 'Passwords do not match!' });
+  }
+
+  try {
+    // const hash = await Account.generateHash(newPass);
+    // const query = req.session.account.username;
+    // console.log(query)
+    // query.password = hash;
+    // console.log(query.password);
+    // console.log(req.session.account.hash)
+    // await query.save();
+    return res.json({ redirect: '/maker' });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'An error occured!' });
+  }
+};
+
 module.exports = {
   loginPage,
   login,
   logout,
   signup,
+  changePassword,
+  changePasswordPage,
 };
